@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define array_size 77826
+#define array_size 230402
 #define array_size_tmp array_size/3
 
 long GetFileSize(FILE *fp);
@@ -33,7 +33,7 @@ unsigned int conv(int i){
 }
 
 int main(void){
-    FILE *fp = fopen("inuko9bit.raw", "rb");
+    FILE *fp = fopen("inuko24.bin", "rb");
     if (fp == NULL){
         fputs("ファイルオープンに失敗しました。\n", stderr);
         exit(EXIT_FAILURE);
@@ -53,7 +53,6 @@ int main(void){
         fputs("ファイルクローズに失敗しました。\n", stderr);
         exit(EXIT_FAILURE);
     }
-    unsigned int tmp[array_size_tmp]={};
     for (int i = 0; i < array_size_tmp; i++){
         int col = conv(i);//intで帰ってくる
         FILE *outputfile;
