@@ -23,11 +23,11 @@ long GetFileSize(FILE *fp)
 }
 
 unsigned int conv(int i){
-    unsigned char r = data[i] >> 5;
-    unsigned char g = data[i + 1] >> 5;
-    unsigned char b = data[i + 2] >> 5;
+    unsigned char r = data[i*3] >> 5;
+    unsigned char g = data[i*3 + 1] >> 5;
+    unsigned char b = data[i*3 + 2] >> 5;
     unsigned int color9 = (r << 6) | (g << 3) | (b << 0);
-    printf("%03X\n", color9);
+    //printf("%03X\n", color9);
 
     return color9;
 }
@@ -55,17 +55,17 @@ int main(void){
     }
     unsigned int tmp[array_size_tmp]={};
     for (int i = 0; i < array_size_tmp; i++){
-        tmp[i] = conv(i);//intで帰ってくる
+        int col = conv(i);//intで帰ってくる
+        FILE *outputfile;
+        outputfile = fopen("output.txt", "a");
+        if (outputfile == NULL){
+            printf("書き込み異常発生");
+            exit(1);
+        }
+        fprintf(outputfile, "%03X\n", col);
+        fclose(outputfile);
+        printf("%03X\n", col);
     }
-
-    FILE *outputfile;
-    outputfile = fopen("output.txt", "w+");
-    if(outputfile==NULL){
-        printf("書き込み異常発生");
-        exit(1);
-    }
-    fprintf(outputfile, "%03X\n",tmp);
-    fclose(outputfile);
     return 0;
 }
 
