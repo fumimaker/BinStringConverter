@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define array_size 77826
+#define array_size_tmp array_size/3
 
 long GetFileSize(FILE *fp);
-unsigned char data[77826] = {};
+unsigned char data[array_size] = {};
 long fileSize;
 
 long GetFileSize(FILE *fp)
@@ -20,15 +22,14 @@ long GetFileSize(FILE *fp)
     return size;
 }
 
-void conv(void)
-{
-    for (int i = 0; i < fileSize; i = i + 3)
-    {
-        unsigned char r = data[i] >> 5;
-        unsigned char g = data[i + 1] >> 5;
-        unsigned char b = data[i + 2] >> 5;
-        printf("%03X\n", (r << 6) | (g << 3) | (b << 0));
-    }
+unsigned int conv(int i){
+    unsigned char r = data[i] >> 5;
+    unsigned char g = data[i + 1] >> 5;
+    unsigned char b = data[i + 2] >> 5;
+    unsigned int color9 = (r << 6) | (g << 3) | (b << 0);
+    printf("%03X\n", color9);
+
+    return color9;
 }
 
 int main(void){
@@ -52,7 +53,19 @@ int main(void){
         fputs("ファイルクローズに失敗しました。\n", stderr);
         exit(EXIT_FAILURE);
     }
-    conv();
+    unsigned int tmp[array_size_tmp]={};
+    for (int i = 0; i < array_size_tmp; i++){
+        tmp[i] = conv(i);//intで帰ってくる
+    }
+
+    FILE *outputfile;
+    outputfile = fopen("output.txt", "w+");
+    if(outputfile==NULL){
+        printf("書き込み異常発生");
+        exit(1);
+    }
+    fprintf(outputfile, "%03X\n",tmp);
+    fclose(outputfile);
     return 0;
 }
 
